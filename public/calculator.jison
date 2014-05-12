@@ -33,6 +33,10 @@
     ambito_actual++; 
     return [id,ambito_actual];
   }
+  
+  function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
+  }
     
 
 %}
@@ -341,47 +345,86 @@ c  //comparison
     
 e
     : e '+' e
-        {$$ = {
-	      type: "+",
-	      left: $1,
-	      right: $3	    
-	      };
+        {
+          if(isNumeric($1) != 0 && isNumeric($3) != 0){
+              $$ = $1+$3;  
+           }  
+           
+           else{  
+              $$ = {
+	          type: "+",
+	          left: $1,
+	          right: $3	    
+	          };
+           }
         }
     | e '-' e
-        {$$ = {
-	      type: "-",
-	      left: $1,
-	      right: $3	    
-	      };
+        {
+          if(isNumeric($1) != 0 && isNumeric($3) != 0){
+              $$ = $1 -$3;  
+          }
+          else{	 
+
+              $$ = {
+              type: "-",
+	          left: $1,
+	          right: $3	    
+	          };
+	  }
         }
     | e '*' e
-       {$$ = {
+       {
+	  if(isNumeric($1) != 0 && isNumeric($3) != 0){
+	    $$ = $1*$3;  
+	  }  
+           
+          else{ 
+	   $$ = {
 	      type: "*",
 	      left: $1,
 	      right: $3	    
 	      };
+	  }
         }
     | e '/' e
         {
-          if ($3 == 0) throw new Error("Division by zero, error!");
-         $$ = {
+         if ($3 == 0) throw new Error("Division by zero, error!");
+	 
+	 if(isNumeric($1) != 0 && isNumeric($3) != 0){
+              $$ = $1/$3;  
+         }
+         else {
+	  $$ = {
 	      type: "/",
 	      left: $1,
 	      right: $3	    
 	      };
+	 }
         }
 
     | '-' e %prec UMINUS
-          {$$ = {
-	      type: "UMINUS",
-	      value: $2,   
-	      };
+          {
+	    if(isNumeric($2) != 0){
+              $$ = $2*(-1);  
+	    }
+	    else {
+	      $$ = {
+		type: "UMINUS",
+		value: $2,   
+		};
+	    }
         }
     | '(' e ')'
-        {$$ = {
-	      type: "()",
-	      value: $2,   
-	      };
+        {
+	  if(isNumeric($2) != 0){
+              $$ = $2;  
+          }
+          else {
+	    $$ = {
+		type: "()",
+		value: $2,   
+		};
+	  }
         }
     | NUMBER
         {$$ = Number(yytext);}

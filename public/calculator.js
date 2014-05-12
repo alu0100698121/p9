@@ -77,8 +77,7 @@ yy: {},
 symbols_: {"error":2,"prog":3,"block":4,"DOT":5,"cont":6,"var":7,"procedure":8,"s":9,"PROCEDURE":10,"nombre_completo":11,"BEGIN":12,"END":13,";":14,"ID":15,"(":16,"parameters":17,")":18,"param_ID":19,"otro_parameter":20,"COMMA":21,"VAR":22,"var_ID":23,"var_otra":24,"CONST":25,"cont_ID":26,"cont_otra":27,"=":28,"NUMBER":29,"e":30,"CALL":31,"IF":32,"c":33,"THEN":34,"ELSE":35,"COMPARISON":36,"ODD":37,"+":38,"-":39,"*":40,"/":41,"E":42,"PI":43,"$accept":0,"$end":1},
 terminals_: {2:"error",5:"DOT",10:"PROCEDURE",12:"BEGIN",13:"END",14:";",15:"ID",16:"(",18:")",21:"COMMA",22:"VAR",25:"CONST",28:"=",29:"NUMBER",31:"CALL",32:"IF",34:"THEN",35:"ELSE",36:"COMPARISON",37:"ODD",38:"+",39:"-",40:"*",41:"/",42:"E",43:"PI"},
 productions_: [0,[3,2],[4,4],[8,7],[8,0],[11,4],[17,2],[17,0],[20,3],[20,0],[19,1],[7,4],[7,0],[24,3],[24,0],[23,1],[6,4],[6,0],[27,3],[27,0],[26,3],[9,4],[9,6],[9,6],[9,4],[33,3],[33,2],[30,3],[30,3],[30,3],[30,3],[30,2],[30,3],[30,1],[30,1],[30,1],[30,1]],
-performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */
-/**/) {
+performAction: function anonymous(yytext, yyleng, yylineno, yy, yystate /* action[1] */, $$ /* vstack */, _$ /* lstack */) {
 /* this == yyval */
 
 var $0 = $$.length - 1;
@@ -305,46 +304,85 @@ case 26: this.$ = {
 		};
 	
 break;
-case 27:this.$ = {
-	      type: "+",
-	      left: $$[$0-2],
-	      right: $$[$0]	    
-	      };
+case 27:
+          if(isNumeric($$[$0-2]) != 0 && isNumeric($$[$0]) != 0){
+              this.$ = $$[$0-2]+$$[$0];  
+           }  
+           
+           else{  
+              this.$ = {
+	          type: "+",
+	          left: $$[$0-2],
+	          right: $$[$0]	    
+	          };
+           }
         
 break;
-case 28:this.$ = {
-	      type: "-",
-	      left: $$[$0-2],
-	      right: $$[$0]	    
-	      };
+case 28:
+          if(isNumeric($$[$0-2]) != 0 && isNumeric($$[$0]) != 0){
+              this.$ = $$[$0-2] -$$[$0];  
+          }
+          else{	 
+
+              this.$ = {
+              type: "-",
+	          left: $$[$0-2],
+	          right: $$[$0]	    
+	          };
+	  }
         
 break;
-case 29:this.$ = {
+case 29:
+	  if(isNumeric($$[$0-2]) != 0 && isNumeric($$[$0]) != 0){
+	    this.$ = $$[$0-2]*$$[$0];  
+	  }  
+           
+          else{ 
+	   this.$ = {
 	      type: "*",
 	      left: $$[$0-2],
 	      right: $$[$0]	    
 	      };
+	  }
         
 break;
 case 30:
-          if ($$[$0] == 0) throw new Error("Division by zero, error!");
-         this.$ = {
+         if ($$[$0] == 0) throw new Error("Division by zero, error!");
+	 
+	 if(isNumeric($$[$0-2]) != 0 && isNumeric($$[$0]) != 0){
+              this.$ = $$[$0-2]/$$[$0];  
+         }
+         else {
+	  this.$ = {
 	      type: "/",
 	      left: $$[$0-2],
 	      right: $$[$0]	    
 	      };
+	 }
         
 break;
-case 31:this.$ = {
-	      type: "UMINUS",
-	      value: $$[$0],   
-	      };
+case 31:
+	    if(isNumeric($$[$0]) != 0){
+              this.$ = $$[$0]*(-1);  
+	    }
+	    else {
+	      this.$ = {
+		type: "UMINUS",
+		value: $$[$0],   
+		};
+	    }
         
 break;
-case 32:this.$ = {
-	      type: "()",
-	      value: $$[$0-1],   
-	      };
+case 32:
+	  if(isNumeric($$[$0-1]) != 0){
+              this.$ = $$[$0-1];  
+          }
+          else {
+	    this.$ = {
+		type: "()",
+		value: $$[$0-1],   
+		};
+	  }
         
 break;
 case 33:this.$ = Number(yytext);
@@ -528,6 +566,10 @@ parse: function parse(input) {
     
     ambito_actual++; 
     return [id,ambito_actual];
+  }
+  
+  function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
   }
     
 
@@ -855,8 +897,7 @@ stateStackSize:function stateStackSize() {
         return this.conditionStack.length;
     },
 options: {},
-performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START
-/**/) {
+performAction: function anonymous(yy,yy_,$avoiding_name_collisions,YY_START) {
 
 var reserved_words ={ PI: 'PI', E : 'E', VAR: 'VAR', CONST: 'CONST', ODD: 'ODD' ,IF : 'IF', THEN : 'THEN', ELSE : 'ELSE',WHILE : 'WHILE', PROCEDURE : 'PROCEDURE', BEGIN: 'BEGIN', END: 'END', CALL: 'CALL'}
 
