@@ -15,18 +15,14 @@
  
   function plegado(ID) {
     
-     console.log(ID);
      if (isNumeric(ID) != 0) {
-       console.log("Entro IF");
        return ID; 
     }
     else if (ID[0].type === 'CONST'){
-      console.log("Entro ELSE")
       return parseFloat(ID[0].value);
     }
     
-    console.log("CRONOSHIFT");
-    return ID;
+    return ID.id;
   }
   
   function crear_ambito(ID){
@@ -362,9 +358,6 @@ e
 	  var a = plegado($1);
 	  var b = plegado($3);
 	  
-	  console.log(a);
-	  console.log(b);
-	  
           if(a != null && b != null){
               $$ = a+b;  
            }  
@@ -379,13 +372,17 @@ e
         }
     | e '-' e
         {
-          if(isNumeric($1) != 0 && isNumeric($3) != 0){
-              $$ = $1 -$3;  
-          }
+	  var a = plegado($1);
+	  var b = plegado($3);
+	  
+	  if(a != null && b != null) {
+	    $$ = a-b
+	  }
+	  
           else{	 
 
               $$ = {
-              type: "-",
+		  type: "-",
 	          left: $1,
 	          right: $3	    
 	          };
@@ -393,9 +390,12 @@ e
         }
     | e '*' e
        {
-	  if(isNumeric($1) != 0 && isNumeric($3) != 0){
-	    $$ = $1*$3;  
-	  }  
+	  var a = plegado($1);
+	  var b = plegado($3);
+	  
+	  if(a != null && b != null) {
+	    $$ = a*b
+	  } 
            
           else{ 
 	   $$ = {
@@ -409,9 +409,12 @@ e
         {
          if ($3 == 0) throw new Error("Division by zero, error!");
 	 
-	 if(isNumeric($1) != 0 && isNumeric($3) != 0){
-              $$ = $1/$3;  
-         }
+	 var a = plegado($1);
+	 var b = plegado($3);
+	  
+	 if(a != null && b != null) {
+	    $$ = a/b
+	 }
          else {
 	  $$ = {
 	      type: "/",
