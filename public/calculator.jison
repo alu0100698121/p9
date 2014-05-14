@@ -8,12 +8,27 @@
   function getambito(){
     return ambito;
   }
- /* 
-  function subir_ambito(){
-    ambito--;
-    symbol_table = symbol_tables[ambito];
+  
+  function isNumeric(n) {
+    return !isNaN(parseFloat(n)) && isFinite(n);
   }
-  */
+ 
+  function plegado(ID) {
+    
+     console.log(ID);
+     if (isNumeric(ID) != 0) {
+       console.log("Entro IF");
+       return ID; 
+    }
+    else if (ID[0].type === 'CONST'){
+      console.log("Entro ELSE")
+      return parseFloat(ID[0].value);
+    }
+    
+    console.log("CRONOSHIFT");
+    return ID;
+  }
+  
   function crear_ambito(ID){
     ambito++;
     symbol_tables.push({ nombre: ID, padre:symbol_table.nombre, contenido:{}});
@@ -34,9 +49,7 @@
     return [id,ambito_actual];
   }
   
-  function isNumeric(n) {
-    return !isNaN(parseFloat(n)) && isFinite(n);
-  }
+
     
 
 %}
@@ -189,7 +202,7 @@ var_ID
       {
 	//if(symbol_table.contenido[$ID])
 	//  throw new Error("Variable: " + $ID + " ya está definida.");
-	symbol_table.contenido[$ID] = {type: 'VAR'};
+	symbol_table.contenido[$ID] = {type: 'VAR', id: $ID};
 	
 	$$ = $ID;
 	
@@ -346,8 +359,14 @@ c  //comparison
 e
     : e '+' e
         {
-          if(isNumeric($1) != 0 && isNumeric($3) != 0){
-              $$ = $1+$3;  
+	  var a = plegado($1);
+	  var b = plegado($3);
+	  
+	  console.log(a);
+	  console.log(b);
+	  
+          if(a != null && b != null){
+              $$ = a+b;  
            }  
            
            else{  
@@ -433,7 +452,7 @@ e
     | PI
         {$$ = Math.PI;}
     | ID
-        { $$ = symbol_table[yytext] || 0; }
+        { $$ = encontrar_id($ID) || 0; }
         
     ;
 
