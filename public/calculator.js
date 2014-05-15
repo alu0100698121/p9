@@ -308,9 +308,6 @@ case 27:
 	  var a = plegado($$[$0-2]);
 	  var b = plegado($$[$0]);
 	  
-	  console.log(a);
-	  console.log(b);
-	  
           if(a != null && b != null){
               this.$ = a+b;  
            }  
@@ -325,13 +322,17 @@ case 27:
         
 break;
 case 28:
-          if(isNumeric($$[$0-2]) != 0 && isNumeric($$[$0]) != 0){
-              this.$ = $$[$0-2] -$$[$0];  
-          }
+	  var a = plegado($$[$0-2]);
+	  var b = plegado($$[$0]);
+	  
+	  if(a != null && b != null) {
+	    this.$ = a-b
+	  }
+	  
           else{	 
 
               this.$ = {
-              type: "-",
+		  type: "-",
 	          left: $$[$0-2],
 	          right: $$[$0]	    
 	          };
@@ -339,9 +340,12 @@ case 28:
         
 break;
 case 29:
-	  if(isNumeric($$[$0-2]) != 0 && isNumeric($$[$0]) != 0){
-	    this.$ = $$[$0-2]*$$[$0];  
-	  }  
+	  var a = plegado($$[$0-2]);
+	  var b = plegado($$[$0]);
+	  
+	  if(a != null && b != null) {
+	    this.$ = a*b
+	  } 
            
           else{ 
 	   this.$ = {
@@ -355,9 +359,12 @@ break;
 case 30:
          if ($$[$0] == 0) throw new Error("Division by zero, error!");
 	 
-	 if(isNumeric($$[$0-2]) != 0 && isNumeric($$[$0]) != 0){
-              this.$ = $$[$0-2]/$$[$0];  
-         }
+	 var a = plegado($$[$0-2]);
+	 var b = plegado($$[$0]);
+	  
+	 if(a != null && b != null) {
+	    this.$ = a/b
+	 }
          else {
 	  this.$ = {
 	      type: "/",
@@ -555,17 +562,13 @@ parse: function parse(input) {
  
   function plegado(ID) {
     
-     console.log(ID);
      if (isNumeric(ID) != 0) {
-       console.log("Entro IF");
        return ID; 
     }
     else if (ID[0].type === 'CONST'){
-      console.log("Entro ELSE")
       return parseFloat(ID[0].value);
     }
     
-    console.log("CRONOSHIFT");
     return ID.id;
   }
   
